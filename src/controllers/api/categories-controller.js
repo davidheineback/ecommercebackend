@@ -1,6 +1,8 @@
-// import { * } from '../../models/image.js'
+import { Category } from '../../models/categories.js'
+import { SubCategory } from '../../models/subcategories.js'
 // import { FetchController } from './fetch-controller.js'
 // import fetch from 'node-fetch'
+import slugify from 'slugify'
 
 /**
  * Encapsulates a controller.
@@ -15,6 +17,32 @@ export class CategoriesController {
    * @returns {Error} - Returns a error if user validation is failed.
    */
   async addNewCategory (req, res, next) {
+    try {
+      const categorydata = {
+        name: req.body.name,
+        description: req.body.description,
+        id: req.body.id,
+        searchurl: slugify(req.body.name, { lower: true }),
+        subs: []
+      }
+
+      console.log(categorydata)
+      Category.insert(categorydata)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * Add new subcategory.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   * @returns {Error} - Returns a error if user validation is failed.
+   */
+  async addNewSubCategory (req, res, next) {
+
   }
 
   /**
