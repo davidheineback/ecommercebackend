@@ -18,3 +18,13 @@ export async function setNewId () {
   }
   return nextId
 }
+
+/**
+ * Find id for a Category by name.
+ *
+ * @param {string} categoryname - Name of the category to find Id for.
+ * @returns {number} id
+ */
+export async function FindCategoryIdByName (categoryname) {
+  return await Category.findOne({ name: categoryname }).id
+}
