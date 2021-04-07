@@ -11,7 +11,7 @@ const schema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: [true, 'description is required.']
+    required: [true, 'Description is required.']
   },
   detailedDescription: {
     type: String
@@ -24,12 +24,10 @@ const schema = new mongoose.Schema({
     default: 1
   },
   productCategory: {
-    type: Array,
-    required: true
+    type: Array
   },
   productSubCategory: {
-    type: Array,
-    required: true
+    type: Array
   },
   inStock: {
     type: Number
