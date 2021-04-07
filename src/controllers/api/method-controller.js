@@ -25,8 +25,16 @@ export async function setNewId (type) {
  * Find id for a Category by name.
  *
  * @param {string} categoryname - Name of the category to find Id for.
- * @returns {number} id
+ * @param {object} subcategory - subcategory to add to the collection of subcategories for a maincategory.
+ * @returns {Array} returns an array with subs.
  */
-export async function findCategoryIdByName (categoryname) {
-  return await Category.findOne({ name: categoryname }).id
+export async function addNewSubCategoryToMain (categoryname, subcategory) {
+  const category = await Category.findOne({ name: categoryname })
+  const subs = category.subs
+  const subids = subs.map(sub => sub.id)
+  if (!subids.includes(subcategory.id)) {
+    subs.push(subcategory)
+  }
+  console.log(subs)
+  return subs
 }

@@ -1,9 +1,7 @@
 import { Category } from '../../models/categories.js'
 import { SubCategory } from '../../models/subcategories.js'
-// import { FetchController } from './fetch-controller.js'
-// import fetch from 'node-fetch'
 import slugify from 'slugify'
-import { setNewId, findCategoryIdByName } from './method-controller.js'
+import { setNewId, addNewSubCategoryToMain } from './method-controller.js'
 
 /**
  * Encapsulates a controller.
@@ -42,10 +40,19 @@ export class CategoriesController {
    * @returns {Error} - Returns a error if user validation is failed.
    */
   async addNewSubCategory (req, res, next) {
-    const mainCategory = findCategoryIdByName(req.body.mainCategory)
-    console.log(mainCategory)
-    // const subCategorydata = {}
-    // SubCategory.insert(subCategorydata)
+    const id = await setNewId('sub')
+    try {
+      const subcategorydata = {
+        name: req.body.name,
+        description: req.body.description,
+        id: id,
+        searchurl: slugify(req.body.name, { lower: true })
+      }
+      await SubCategory.insert(subcategorydata)
+      await Category.findOneAndUpdate({ name: req.body.mainCategory }, { subs: await addNewSubCategoryToMain(req.body.mainCategory, subcategorydata) })
+    } catch (error) {
+      next(error)
+    }
   }
 
   /**
