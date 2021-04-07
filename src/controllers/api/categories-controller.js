@@ -3,7 +3,7 @@ import { SubCategory } from '../../models/subcategories.js'
 // import { FetchController } from './fetch-controller.js'
 // import fetch from 'node-fetch'
 import slugify from 'slugify'
-import { setNewId } from './method-controller.js'
+import { setNewId, findCategoryIdByName } from './method-controller.js'
 
 /**
  * Encapsulates a controller.
@@ -27,8 +27,6 @@ export class CategoriesController {
         searchurl: slugify(req.body.name, { lower: true }),
         subs: []
       }
-
-      console.log(categorydata)
       Category.insert(categorydata)
     } catch (error) {
       next(error)
@@ -44,8 +42,10 @@ export class CategoriesController {
    * @returns {Error} - Returns a error if user validation is failed.
    */
   async addNewSubCategory (req, res, next) {
-    const subCategorydata = {}
-    SubCategory.insert(subCategorydata)
+    const mainCategory = findCategoryIdByName(req.body.mainCategory)
+    console.log(mainCategory)
+    // const subCategorydata = {}
+    // SubCategory.insert(subCategorydata)
   }
 
   /**
