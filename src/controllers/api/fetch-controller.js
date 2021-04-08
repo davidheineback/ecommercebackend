@@ -51,6 +51,24 @@ export class FetchController {
   }
 
   /**
+   * Get products without specified category or subcategory.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   * @returns {Error} - Returns a error if user validation is failed.
+   */
+  async getProducts (req, res, next) {
+    try {
+      const rawProducts = await Product.find({})
+      const products = rawProducts.map(rawProduct => escapeOutput(rawProduct))
+      res.status(200).send(products)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
    * Get Id for a main category.
    *
    * @param {object} req - Express request object.

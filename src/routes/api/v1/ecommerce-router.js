@@ -13,6 +13,7 @@ const categoriesController = new CategoriesController()
 
 // Get routes::
 router.route('/category/').get(fetchController.getCategories)
+router.route('/products/').get(fetchController.getProducts)
 router.route('/category/:id').get(fetchController.getIdFromMainName, fetchController.getProductsByCategoryId)
 router.route('/subcategory/:id').get(fetchController.getIdFromSubName, fetchController.getProductsByCategoryId)
 router.route('/product/:id').get(fetchController.getProdctWithId)
