@@ -1,7 +1,7 @@
 import { Product } from '../../models/products.js'
 import { SubCategory } from '../../models/subcategories.js'
 import { Category } from '../../models/categories.js'
-import { filterOutput } from './method-controller.js'
+import { escapeOutput } from './method-controller.js'
 
 /**
  * Encapsulates a controller.
@@ -24,7 +24,7 @@ export class FetchController {
         rawProducts = await Product.find({ productSubCategory: req.subId })
       }
       if (rawProducts) {
-        const products = rawProducts.map(rawProduct => filterOutput(rawProduct))
+        const products = rawProducts.map(rawProduct => escapeOutput(rawProduct))
         return res.status(200).send(products)
       }
       return res.sendStatus(201)
@@ -88,7 +88,7 @@ export class FetchController {
     try {
       const rawProduct = await Product.findOne({ itemNr: req.params.id })
       if (rawProduct) {
-        const product = filterOutput(rawProduct)
+        const product = escapeOutput(rawProduct)
         return res.status(200).send(product)
       }
       return res.status(404).send(`Couldn't find any products with id: ${req.params.id}`)

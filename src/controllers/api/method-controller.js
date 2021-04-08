@@ -60,7 +60,7 @@ export async function addNewSubCategoryToMain (categoryname, subcategory) {
  * @param {object} rawProduct - An object representing a product.
  * @returns {object} - A filtered object representing a product.
  */
-export function filterOutput (rawProduct) {
+export function escapeOutput (rawProduct) {
   return {
     name: rawProduct.name,
     description: rawProduct.description,
