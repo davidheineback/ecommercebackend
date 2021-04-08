@@ -34,6 +34,23 @@ export class FetchController {
   }
 
   /**
+   * Get all categories.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   * @returns {Error} - Returns a error if user validation is failed.
+   */
+  async getCategories (req, res, next) {
+    try {
+      const categories = await Category.find({})
+      res.status(200).send(categories)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
    * Get Id for a main category.
    *
    * @param {object} req - Express request object.
