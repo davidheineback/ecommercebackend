@@ -1,7 +1,5 @@
 import { Product } from '../../models/products.js'
 import { setNewId, findCategoryIdByName } from './method-controller.js'
-// import { FetchController } from './fetch-controller.js'
-// import fetch from 'node-fetch'
 
 /**
  * Encapsulates a controller.
