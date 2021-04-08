@@ -18,14 +18,19 @@ export class CategoriesController {
   async addNewCategory (req, res, next) {
     const id = await setNewId()
     try {
-      const categorydata = {
-        name: req.body.name,
-        description: req.body.description,
-        id: id,
-        searchurl: slugify(req.body.name, { lower: true }),
-        subs: []
+      const exists = await Category.findOne({ name: req.body.name })
+      if (!exists) {
+        const categorydata = {
+          name: req.body.name,
+          description: req.body.description,
+          id: id,
+          searchurl: slugify(req.body.name, { lower: true }),
+          subs: []
+        }
+        await Category.insert(categorydata)
+        return res.sendStatus(200)
       }
-      Category.insert(categorydata)
+      return res.status(409).send('Category already exist')
     } catch (error) {
       next(error)
     }
@@ -40,16 +45,18 @@ export class CategoriesController {
    * @returns {Error} - Returns a error if user validation is failed.
    */
   async addNewSubCategory (req, res, next) {
-    const id = await setNewId('sub')
     try {
+      const id = await setNewId('sub')
+      const exists = await SubCategory.findOne({ name: req.body.name })
       const subcategorydata = {
         name: req.body.name,
         description: req.body.description,
-        id: id,
+        subid: exists ? exists.subid : id,
         searchurl: slugify(req.body.name, { lower: true })
       }
-      await SubCategory.insert(subcategorydata)
+      if (!exists) { await SubCategory.insert(subcategorydata) }
       await Category.findOneAndUpdate({ name: req.body.mainCategory }, { subs: await addNewSubCategoryToMain(req.body.mainCategory, subcategorydata) })
+      return res.sendStatus(200)
     } catch (error) {
       next(error)
     }
