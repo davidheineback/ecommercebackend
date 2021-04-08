@@ -1,24 +1,40 @@
 import { Category } from '../../models/categories.js'
 import { SubCategory } from '../../models/subcategories.js'
+import { Product } from '../../models/products.js'
 
 /**
  * Set new id.
  *
- * @param {string} type - represent the level of the category to set new id for. main or sub.
+ * @param {string} type - represent the level of the category to set new id for. main, sub or product.
  * @returns {number} id
  */
 export async function setNewId (type) {
   let nextId = ''
-  type === 'sub'
-    ? (nextId = await SubCategory.find({}))
-    : (nextId = await Category.find({}))
-
-  nextId.length < 1
-    ? (nextId = 1)
-    : (nextId = nextId
-        .map(id => id.id)
-        .sort((a, b) => b - a)[0] + 1)
-  return nextId
+  let prefix = ''
+  switch (type) {
+    case 'sub':
+      nextId = await SubCategory.find({})
+      nextId[0] === undefined && (nextId[0] = 1)
+      prefix = 'subid'
+      break
+    case 'product':
+      nextId = await Product.find({})
+      nextId[0] === undefined && (nextId[0] = 600000)
+      prefix = 'itemNr'
+      break
+    default:
+      nextId = await Category.find({})
+      nextId[0] === undefined && (nextId[0] = 1)
+      prefix = 'id'
+      break
+  }
+  if (nextId[0] === 1 || nextId[0] === 600000) {
+    return nextId[0]
+  } else {
+    return nextId
+      .map(id => id[prefix])
+      .sort((a, b) => b - a)[0] + 1
+  }
 }
 
 /**
@@ -31,10 +47,36 @@ export async function setNewId (type) {
 export async function addNewSubCategoryToMain (categoryname, subcategory) {
   const category = await Category.findOne({ name: categoryname })
   const subs = category.subs
-  const subids = subs.map(sub => sub.id)
-  if (!subids.includes(subcategory.id)) {
+  const subids = subs.map(sub => sub.subid)
+  if (!subids.includes(subcategory.subid)) {
     subs.push(subcategory)
   }
-  console.log(subs)
   return subs
+}
+
+/**
+ * Method to get id of a category that is to be added to a product.
+ *
+ * @param {string} type - A string representing the type of category to search. main or sub.
+ * @param {string} mainCategoryname - name of the category to find.
+ * @param {string} subCategoryname - name of the category to find.
+ * @returns {number} A number representing an id.
+ */
+export async function findCategoryIdByName (type, mainCategoryname, subCategoryname) {
+  const category = await Category.findOne({ name: mainCategoryname })
+  let subid = ''
+  let sub = null
+  if (category) {
+    switch (type) {
+      case 'sub':
+        subid = await SubCategory.findOne({ name: subCategoryname })
+        subid && (sub = category.subs.map(subs => subs.subid).includes(subid.subid) && subid.subid)
+        return sub
+      case 'main':
+        return category.id
+      default:
+        break
+    }
+  }
+  return sub
 }
