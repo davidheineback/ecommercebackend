@@ -55,6 +55,28 @@ export async function addNewSubCategoryToMain (categoryname, subcategory) {
 }
 
 /**
+ * Filter product data before sending as response.
+ *
+ * @param {object} rawProduct - An object representing a product.
+ * @returns {object} - A filtered object representing a product.
+ */
+export function filterOutput (rawProduct) {
+  return {
+    name: rawProduct.name,
+    description: rawProduct.description,
+    detailedDescription: rawProduct.detailedDescription,
+    price: rawProduct.price * rawProduct.discount,
+    itemNr: rawProduct.itemNr,
+    inStock: rawProduct.inStock > 0,
+    image: rawProduct.image,
+    brand: rawProduct.brand,
+    options: rawProduct.options,
+    reviews: rawProduct.reviews,
+    rating: rawProduct.rating
+  }
+}
+
+/**
  * Method to get id of a category that is to be added to a product.
  *
  * @param {string} type - A string representing the type of category to search. main or sub.
