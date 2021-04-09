@@ -79,7 +79,6 @@ export class FetchController {
   async getIdFromMainName (req, res, next) {
     try {
       const maincategory = await Category.findOne({ searchurl: req.params.id })
-      console.log(maincategory)
       if (!maincategory) {
         res.sendStatus(404)
       }
