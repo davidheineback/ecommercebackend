@@ -1,6 +1,7 @@
 const fetch = require('node-fetch')
+
 /**
- * Fetch method.
+ * Fetch get method.
  *
  * @param {string} type - String with type of fetch.
  * @returns {number} returnStatus - a variable representing a status.
@@ -11,7 +12,7 @@ async function fetchGetMethod (type) {
     const returnStatus = status.status
     return returnStatus
   } catch (error) {
-    throw new Error(error)
+    console.error(error)
   }
 }
 
