@@ -7,13 +7,9 @@ const fetch = require('node-fetch')
  * @returns {number} returnStatus - a variable representing a status.
  */
 async function fetchGetMethod (type) {
-  try {
-    const status = await fetch(`http://localhost:8080/api/v1/${type}`)
-    const returnStatus = status.status
-    return returnStatus
-  } catch (error) {
-    console.error(error)
-  }
+  const status = await fetch(`http://localhost:8080/api/v1/${type}`)
+  const returnStatus = status.status
+  return returnStatus
 }
 
 module.exports = fetchGetMethod

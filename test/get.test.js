@@ -2,56 +2,56 @@
 const fetchGetMethod = require('./getTest.js')
 
 // Add keyword "products" as paramter to the fetchGetMethod to test the products route
-test('test get products', async () => {
+test('get existing products without specified category returns 200 OK', async () => {
   expect(
     await fetchGetMethod('products')).toBe(200)
 })
 
 // Add keyword "category" as paramter to the fetchGetMethod to test the category route
-test('test get category', async () => {
+test('get category names returns 200 OK', async () => {
   expect(
     await fetchGetMethod('category')).toBe(200)
 })
 
-// Add a available main category as parameter to fetchGetMethod.
-test('test get products by maincategory', async () => {
+// Add 'category/:existing-maincategory' as parameter to fetchGetMethod.
+test('get products by existing maincategory returns 200 OK', async () => {
   expect(
     await fetchGetMethod('category/mockup-1')).toBe(200)
 })
 
-// Add a available subcategory as parameter to fetchGetMethod.
-test('test get products by subcategory', async () => {
+// Add 'category/:non-existing-maincategory' as parameter to fetchGetMethod.
+test('get products by non existing maincategory returns 404 Not Found', async () => {
+  expect(
+    await fetchGetMethod('category/mock1')).toBe(404)
+})
+
+// Add 'subcategory/:existing-subcategory' as parameter to fetchGetMethod.
+test('get products by existing subcategory returns 200 OK', async () => {
   expect(
     await fetchGetMethod('subcategory/subcategory-1')).toBe(200)
 })
 
-// Add a available productId as parameter to fetchGetMethod.
-test('test get product by productId', async () => {
+// Add 'subcategory/:non-existing-subcategory' as parameter to fetchGetMethod.
+test('get products by non existing subcategory returns 404 Not Found', async () => {
+  expect(
+    await fetchGetMethod('subcategory/sub1')).toBe(404)
+})
+
+// Add a 'product/:existing-productId' as parameter to fetchGetMethod.
+test('get product by existing productId returns 200 OK', async () => {
   expect(
     await fetchGetMethod('product/600009')).toBe(200)
 })
 
 
-// Add a non available maincategory as parameter to fetchGetMethod.
-test('test get products by maincategory', async () => {
-  expect(
-    await fetchGetMethod('category/mock1')).toBe(404)
-})
-
-// Add a non available subcategory as parameter to fetchGetMethod.
-test('test get products by subcategory', async () => {
-  expect(
-    await fetchGetMethod('subcategory/sub1')).toBe(404)
-})
-
-// Add a non available productId as parameter to fetchGetMethod.
-test('test get product by productid', async () => {
+// Add a 'product/:non-existing-productId' as parameter to fetchGetMethod.
+test('get product by non existing productId returns 404 Not Found', async () => {
   expect(
     await fetchGetMethod('product/609')).toBe(404)
 })
 
-// Add a non available route as parameter to fetchGetMethod.
-test('test get random', async () => {
+// Add a non existing route as parameter to fetchGetMethod.
+test('get request for non existing route returns 404 Not Found', async () => {
   expect(
     await fetchGetMethod('random')).toBe(404)
 })
