@@ -102,7 +102,7 @@ afterAll(async () => {
     await Category.deleteMany()
     await Product.deleteMany()
     await SubCategory.deleteMany()
-    mongoose.connection.close()
+    await mongoose.connection.close()
     app.close()
 })
 })
