@@ -26,11 +26,12 @@ describe('Get testing for database routes', () => {
 
   })
 
-  it('should create a new post', async () => {
-    const res = await request(app)
-      .get('/api/v1')
-    expect(res.statusCode).toEqual(200)
-  })
+  // Add a non existing route as parameter to fetchGetMethod.
+it('get request for non existing route returns 404 Not Found', async () => {
+  const res = await request(app)
+  .get('/api/v1/random')
+expect(res.statusCode).toEqual(404)
+})
 
   // Add keyword "category" as paramter to the fetchGetMethod to test the category route
   it('get category names returns 200 OK', async () => {
@@ -71,39 +72,37 @@ it('get products by existing subcategory returns 200 OK', async done => {
   done()
 })
 
-// Add 'subcategory/:existing-subcategory' as parameter to fetchGetMethod.
-it('get products by existing subcategory returns 404 Not Found', async done => {
+// Add 'subcategory/:non-existing-subcategory' as parameter to fetchGetMethod.
+it('get products by non existing subcategory returns 404 Not Found', async done => {
   const res = await request(app)
   .get('/api/v1/subcategory/sub1')
   expect(res.statusCode).toEqual(404)
   done()
 })
 
-// // Add a 'product/:existing-productId' as parameter to fetchGetMethod.
-// test('get product by existing productId returns 200 OK', async () => {
-//   expect(
-//     await fetchGetMethod('product/600009')).toBe(200)
-// })
 
 
-// // Add a 'product/:non-existing-productId' as parameter to fetchGetMethod.
-// test('get product by non existing productId returns 404 Not Found', async () => {
-//   expect(
-//     await fetchGetMethod('product/609')).toBe(404)
-// })
+// Add a 'product/:existing-productId' as parameter to fetchGetMethod.
+it('get product by existing productId returns 200 OK', async done => {
+  const res = await request(app)
+  .get('/api/v1/product/600000')
+  expect(res.statusCode).toEqual(200)
+  done()
+})
 
-// // Add a non existing route as parameter to fetchGetMethod.
-// test('get request for non existing route returns 404 Not Found', async () => {
-//   expect(
-//     await fetchGetMethod('random')).toBe(404)
-// })
-
+// Add a 'product/:existing-productId' as parameter to fetchGetMethod.
+it('get product by non existing productId returns 404 OK', async done => {
+  const res = await request(app)
+  .get('/api/v1/product/609')
+  expect(res.statusCode).toEqual(404)
+  done()
+})
 
 afterAll(async () => {
-    mongoose.connection.close()
-    app.close()
     await Category.deleteMany()
     await Product.deleteMany()
     await SubCategory.deleteMany()
+    mongoose.connection.close()
+    app.close()
 })
 })
