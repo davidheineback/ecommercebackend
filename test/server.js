@@ -61,7 +61,4 @@ app.use(function (err, req, res, next) {
 })
 
 // Starts the HTTP server listening for connections.
-app.listen(process.env.PORT_TEST, () => {
-  console.log(`Server running at http://localhost:${process.env.PORT_TEST}`)
-  console.log('Press Ctrl-C to terminate...')
-})
+app.listen(process.env.PORT_TEST)
