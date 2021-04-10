@@ -11,63 +11,57 @@ import cors from 'cors'
 import helmet from 'helmet'
 import logger from 'morgan'
 import { router } from '../src/routes/router.js'
-import { connectDB } from './config/mongoose.js'
 
 dotenv.config()
 
 /**
  * The main function of the application.
  */
-const main = async () => {
-  await connectDB()
 
-  const app = express()
+export const app = express()
 
-  // Set various HTTP headers to make the application little more secure (https://www.npmjs.com/package/helmet).
-  app.use(helmet())
+// Set various HTTP headers to make the application little more secure (https://www.npmjs.com/package/helmet).
+app.use(helmet())
 
-  app.use(cors())
+app.use(cors())
 
-  // Set up a morgan logger using the dev format for log entries.
-  app.use(logger('dev'))
+// Set up a morgan logger using the dev format for log entries.
+app.use(logger('dev'))
 
-  // Parse requests of the content type application/json.
-  app.use(express.json({ limit: '500kb' }))
+// Parse requests of the content type application/json.
+app.use(express.json({ limit: '500kb' }))
 
-  // Register routes.
-  app.use('/', router)
+// Register routes.
+app.use('/', router)
 
-  // Error handler.
-  app.use(function (err, req, res, next) {
-    err.status = err.status || 500
+// Error handler.
+app.use(function (err, req, res, next) {
+  err.status = err.status || 500
 
-    if (req.app.get('env') !== 'development') {
-      res
-        .status(err.status)
-        .json({
-          status: err.status,
-          message: err.message
-        })
-      return
-    }
-
-    // Development only!
-    // Only providing detailed error in development.
-    return res
+  if (req.app.get('env') !== 'development') {
+    res
       .status(err.status)
       .json({
         status: err.status,
-        message: err.message,
-        innerException: err.innerException,
-        stack: err.stack
+        message: err.message
       })
-  })
+    return
+  }
 
-  // Starts the HTTP server listening for connections.
-  app.listen(process.env.PORT_TEST, () => {
-    console.log(`Server running at http://localhost:${process.env.PORT_TEST}`)
-    console.log('Press Ctrl-C to terminate...')
-  })
-}
+  // Development only!
+  // Only providing detailed error in development.
+  return res
+    .status(err.status)
+    .json({
+      status: err.status,
+      message: err.message,
+      innerException: err.innerException,
+      stack: err.stack
+    })
+})
 
-main().catch(console.error)
+// Starts the HTTP server listening for connections.
+app.listen(process.env.PORT_TEST, () => {
+  console.log(`Server running at http://localhost:${process.env.PORT_TEST}`)
+  console.log('Press Ctrl-C to terminate...')
+})

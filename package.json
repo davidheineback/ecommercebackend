@@ -10,7 +10,7 @@
     "start:test": "node test/server.js",
     "lint": "npx eslint ./src || exit 0",
     "lint:fix": "npx eslint ./src --fix || exit 0",
-    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --testTimeout=15000 --coverage"
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --testTimeout=10000 --detectOpenHandles"
   },
   "repository": {
     "type": "git",
