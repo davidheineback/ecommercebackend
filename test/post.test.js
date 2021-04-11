@@ -26,11 +26,33 @@ describe('POST testing for database routes', () => {
 
   })
 
-// Add a 'product/:existing-productId' as parameter to fetchGetMethod.
-it('get product by non existing productId returns 404 OK', async done => {
+// Add a 'admin/addcategory' as parameter to post.
+// Add a excisting category as parameter to send.
+it('Post a a excisting category returns 409 conflict', async done => {
   const res = await request(app)
   .post('/api/v1/admin/addcategory')
   .send(categorydata)
+  expect(res.statusCode).toEqual(409)
+  done()
+})
+
+// Add a 'admin/addsubcategory' as parameter to post.
+// Add a excisting subcategory as parameter to send.
+it('Post a a excisting subcategory returns 409 conflict', async done => {
+  const res = await request(app)
+  .post('/api/v1/admin/addsubcategory')
+  .send(subcategorydata)
+  expect(res.statusCode).toEqual(409)
+  done()
+})
+
+
+// Add a 'admin/addproduct' as parameter to post.
+// Add a excisting product as parameter to send.
+it('Post a a excisting product returns 409 conflict', async done => {
+  const res = await request(app)
+  .post('/api/v1/admin/addproduct')
+  .send(productdata)
   expect(res.statusCode).toEqual(409)
   done()
 })
