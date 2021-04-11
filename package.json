@@ -9,7 +9,7 @@
     "start:dev": "nodemon --inspect -r dotenv/config src/server.js",
     "lint": "npx eslint ./src || exit 0",
     "lint:fix": "npx eslint ./src --fix || exit 0",
-    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --testTimeout=10000 --detectOpenHandles --runInBand --coverage"
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules npx jest --testTimeout=10000 --detectOpenHandles --runInBand --coverage"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@lnu/eslint-config": "^1.1.2",
+    "cross-env": "^7.0.3",
     "dotenv": "^8.2.0",
     "eslint": "^7.17.0",
     "eslint-plugin-import": "^2.22.1",
