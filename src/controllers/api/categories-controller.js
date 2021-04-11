@@ -55,8 +55,9 @@ export class CategoriesController {
         searchurl: slugify(req.body.name, { lower: true })
       }
       if (!exists) { await SubCategory.insert(subcategorydata) }
-      if (req.body.mainCategory) {
-        await Category.findOneAndUpdate({ name: req.body.mainCategory }, { subs: await addNewSubCategoryToMain(req.body.mainCategory, subcategorydata) })
+      const subArray = await addNewSubCategoryToMain(req.body.mainCategory, subcategorydata)
+      if (subArray) {
+        await Category.findOneAndUpdate({ name: req.body.mainCategory }, { subs: subArray })
       } else {
         return res.status(400)
       }

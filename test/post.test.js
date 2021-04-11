@@ -49,15 +49,18 @@ it('Post a a excisting subcategory returns 200 OK', async done => {
 })
 
 
-// Add a 'admin/addsubcategory' as parameter to post.
-// Add a excisting subcategory as parameter to send.
-it('Post a non existing subcategory without maincategory returns 400 Bad request', async done => {
-  const res = await request(app)
-  .post('/api/v1/admin/addsubcategory')
-  .send(testdata.newdoublysub)
-  expect(res.statusCode).toEqual(200)
-  done()
-})
+// // Add a 'admin/addsubcategory' as parameter to post.
+// // Add a excisting subcategory as parameter to send.
+// it('Post a non existing subcategory without maincategory returns 400 Bad request', async done => {
+//   const res = await request(app)
+//   .post('/api/v1/admin/addsubcategory')
+//   .send(testdata.newincompletesub)
+//   console.log('I TESTET')
+//   console.log(res)
+//   console.log(res.statusCode)
+//   expect(res.statusCode).toEqual(400)
+//   done()
+// })
 
 
 // Add a 'admin/addproduct' as parameter to post.
@@ -69,6 +72,38 @@ it('Post a a excisting product returns 409 conflict', async done => {
   expect(res.statusCode).toEqual(409)
   done()
 })
+
+// Add a 'admin/addcategory' as parameter to post.
+// Add a non excisting category as parameter to send.
+it('Post a a excisting category returns 409 conflict', async done => {
+  const res = await request(app)
+  .post('/api/v1/admin/addcategory')
+  .send(testdata.newmain)
+  expect(res.statusCode).toEqual(200)
+  done()
+})
+
+// Add a 'admin/addsubcategory' as parameter to post.
+// Add a non excisting subcategory as parameter to send.
+it('Post a a excisting subcategory returns 200 OK', async done => {
+  const res = await request(app)
+  .post('/api/v1/admin/addsubcategory')
+  .send(testdata.newsub)
+  expect(res.statusCode).toEqual(200)
+  done()
+})
+
+
+// Add a 'admin/addproduct' as parameter to post.
+// Add a non excisting product as parameter to send.
+it('Post a non excisting product returns 200 OK', async done => {
+  const res = await request(app)
+  .post('/api/v1/admin/addproduct')
+  .send(testdata.newproduct)
+  expect(res.statusCode).toEqual(200)
+  done()
+})
+
 
 afterAll(async () => {
     await Category.deleteMany()

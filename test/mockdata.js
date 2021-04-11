@@ -74,13 +74,18 @@ export const testdata = {
     options: ''
   },
   newmain: {
-    name: 'Mockup 1',
-    description: 'MOCKUP CATEGORY 2'
+    name: 'Mockup 5',
+    description: 'MOCKUP CATEGORY 5'
+  },
+  newincompletesub: {
+    name: 'Subcategory 4',
+    mainCategory: '',
+    description: 'SUB TEST 4 DESCRIPTION'
   },
   newsub: {
     name: 'Subcategory 3',
-    mainCategory: '',
-    description: 'SUB TEST 2 DESCRIPTION'
+    mainCategory: 'Mockup 1',
+    description: 'SUB TEST 3 DESCRIPTION'
   },
   newproduct: {
     name: 'NEW PRODUCT TEST',

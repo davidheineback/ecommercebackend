@@ -45,13 +45,21 @@ export async function setNewId (type) {
  * @returns {Array} returns an array with subs.
  */
 export async function addNewSubCategoryToMain (categoryname, subcategory) {
-  const category = await Category.findOne({ name: categoryname })
-  const subs = category.subs
-  const subids = subs.map(sub => sub.subid)
-  if (!subids.includes(subcategory.subid)) {
-    subs.push(subcategory)
+  try {
+    if (categoryname.length > 0) {
+      const category = await Category.findOne({ name: categoryname })
+      const subs = category.subs
+      const subids = subs.map(sub => sub.subid)
+      if (!subids.includes(subcategory.subid)) {
+        subs.push(subcategory)
+      }
+      return subs
+    } else {
+      return false
+    }
+  } catch (error) {
+    throw new Error(error)
   }
-  return subs
 }
 
 /**
