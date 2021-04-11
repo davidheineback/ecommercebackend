@@ -54,3 +54,28 @@ export const subcategorydata2 = {
   subid: 2,
   searchurl: 'subcategory-2'
 }
+
+export const newdoublymain = {
+  name: 'Mockup 1',
+  description: 'MOCKUP CATEGORY 2'
+}
+
+export const newdoublysub = {
+  name: 'Subcategory 1',
+  mainCategory: 'Mockup 1',
+  description: 'SUB TEST 1 DESCRIPTION'
+}
+
+export const newdoublyproduct = {
+  name: 'TEST PRODUCT',
+  description: 'description TEST',
+  detailedDescription: 'detail description TEST',
+  price: '100',
+  discount: 1,
+  productCategory: 'Mockup 1',
+  productSubCategory: 'Subcategory 2',
+  inStock: 10,
+  image: '',
+  brand: 'TEST Brand',
+  options: ''
+}

@@ -4,7 +4,15 @@ import request from 'supertest'
 import { Product } from '../src/models/products.js'
 import { SubCategory } from '../src/models/subcategories.js'
 import { Category } from '../src/models/categories.js'
-import { categorydata, categorydata2, subcategorydata, subcategorydata2, productdata } from './mockdata.js'
+import { categorydata,
+  categorydata2,
+  subcategorydata,
+  subcategorydata2,
+  productdata,
+  newdoublymain,
+  newdoublysub,
+  newdoublyproduct 
+} from './mockdata.js'
 import dotenv from 'dotenv'
 import { app } from './server.js'
 dotenv.config()
@@ -31,7 +39,7 @@ describe('POST testing for database routes', () => {
 it('Post a a excisting category returns 409 conflict', async done => {
   const res = await request(app)
   .post('/api/v1/admin/addcategory')
-  .send(categorydata)
+  .send(newdoublymain)
   expect(res.statusCode).toEqual(409)
   done()
 })
@@ -41,7 +49,7 @@ it('Post a a excisting category returns 409 conflict', async done => {
 it('Post a a excisting subcategory returns 409 conflict', async done => {
   const res = await request(app)
   .post('/api/v1/admin/addsubcategory')
-  .send(subcategorydata)
+  .send(newdoublysub)
   expect(res.statusCode).toEqual(409)
   done()
 })
@@ -52,7 +60,7 @@ it('Post a a excisting subcategory returns 409 conflict', async done => {
 it('Post a a excisting product returns 409 conflict', async done => {
   const res = await request(app)
   .post('/api/v1/admin/addproduct')
-  .send(productdata)
+  .send(newdoublyproduct)
   expect(res.statusCode).toEqual(409)
   done()
 })
