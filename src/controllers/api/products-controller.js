@@ -16,7 +16,7 @@ export class ProductsController {
   async addNewProduct (req, res, next) {
     try {
       const productCategory = await findCategoryIdByName('main', req.body.productCategory)
-
+      console.log(productCategory)
       let productSubCategory = ''
       if (req.body.productSubCategory.length > 0) {
         productSubCategory = await findCategoryIdByName('sub', req.body.productCategory, req.body.productSubCategory)

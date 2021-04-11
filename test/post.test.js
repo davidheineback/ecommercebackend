@@ -4,22 +4,14 @@ import request from 'supertest'
 import { Product } from '../src/models/products.js'
 import { SubCategory } from '../src/models/subcategories.js'
 import { Category } from '../src/models/categories.js'
-import { categorydata,
-  categorydata2,
-  subcategorydata,
-  subcategorydata2,
-  productdata,
-  newdoublymain,
-  newdoublysub,
-  newdoublyproduct 
-} from './mockdata.js'
+import { testdata } from './mockdata.js'
 import dotenv from 'dotenv'
 import { app } from './server.js'
 dotenv.config()
 
 
 describe('POST testing for database routes', () => {
-  beforeAll(async () => {
+  beforeEach(async () => {
     await mongoose.connect(process.env.DB_CONNECTION_STRING_TEST, {
       useCreateIndex: true,
       useNewUrlParser: true,
@@ -28,9 +20,11 @@ describe('POST testing for database routes', () => {
     await Category.deleteMany()
     await SubCategory.deleteMany()
     await Product.deleteMany()
-    await Category.insertMany(categorydata, categorydata2)
-    await SubCategory.insertMany(subcategorydata, subcategorydata2)
-    await Product.insertMany(productdata)
+    await Category.insertMany(testdata.categorydata)
+    await Category.insertMany(testdata.categorydata2)
+    await SubCategory.insertMany(testdata.subcategorydata)
+    await SubCategory.insertMany(testdata.subcategorydata2)
+    await Product.insertMany(testdata.productdata)
 
   })
 
@@ -39,18 +33,29 @@ describe('POST testing for database routes', () => {
 it('Post a a excisting category returns 409 conflict', async done => {
   const res = await request(app)
   .post('/api/v1/admin/addcategory')
-  .send(newdoublymain)
+  .send(testdata.newdoublymain)
   expect(res.statusCode).toEqual(409)
   done()
 })
 
 // Add a 'admin/addsubcategory' as parameter to post.
 // Add a excisting subcategory as parameter to send.
-it('Post a a excisting subcategory returns 409 conflict', async done => {
+it('Post a a excisting subcategory returns 200 OK', async done => {
   const res = await request(app)
   .post('/api/v1/admin/addsubcategory')
-  .send(newdoublysub)
-  expect(res.statusCode).toEqual(409)
+  .send(testdata.newdoublysub)
+  expect(res.statusCode).toEqual(200)
+  done()
+})
+
+
+// Add a 'admin/addsubcategory' as parameter to post.
+// Add a excisting subcategory as parameter to send.
+it('Post a non existing subcategory without maincategory returns 400 Bad request', async done => {
+  const res = await request(app)
+  .post('/api/v1/admin/addsubcategory')
+  .send(testdata.newdoublysub)
+  expect(res.statusCode).toEqual(200)
   done()
 })
 
@@ -60,7 +65,7 @@ it('Post a a excisting subcategory returns 409 conflict', async done => {
 it('Post a a excisting product returns 409 conflict', async done => {
   const res = await request(app)
   .post('/api/v1/admin/addproduct')
-  .send(newdoublyproduct)
+  .send(testdata.newdoublyproduct)
   expect(res.statusCode).toEqual(409)
   done()
 })
