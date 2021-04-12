@@ -4,6 +4,10 @@
   "description": "",
   "type": "module",
   "main": "src/server.js",
+  "engines": {
+    "node": "11.10.0",
+    "npm": "6.7.0"
+  },
   "scripts": {
     "start": "node src/server.js",
     "start:dev": "nodemon --inspect -r dotenv/config src/server.js",
@@ -49,10 +53,6 @@
   },
   "nodemonConfig": {
     "ext": "js,json,hbs,html,css"
-  },
-  "engines": {
-    "node": "11.10.0",
-    "npm": "6.7.0"
   },
   "jest": {
     "testEnvironment": "node",
