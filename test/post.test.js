@@ -7,6 +7,7 @@ import { Category } from '../src/models/categories.js'
 import { testdata } from './mockdata.js'
 import dotenv from 'dotenv'
 import { app } from './server.js'
+
 dotenv.config()
 
 
@@ -25,7 +26,6 @@ describe('POST testing for database routes', () => {
     await SubCategory.insertMany(testdata.subcategorydata)
     await SubCategory.insertMany(testdata.subcategorydata2)
     await Product.insertMany(testdata.productdata)
-
   })
 
 // Add a 'admin/addcategory' as parameter to post.
@@ -49,18 +49,15 @@ it('Post a a excisting subcategory returns 200 OK', async done => {
 })
 
 
-// // Add a 'admin/addsubcategory' as parameter to post.
-// // Add a excisting subcategory as parameter to send.
-// it('Post a non existing subcategory without maincategory returns 400 Bad request', async done => {
-//   const res = await request(app)
-//   .post('/api/v1/admin/addsubcategory')
-//   .send(testdata.newincompletesub)
-//   console.log('I TESTET')
-//   console.log(res)
-//   console.log(res.statusCode)
-//   expect(res.statusCode).toEqual(400)
-//   done()
-// })
+// Add a 'admin/addsubcategory' as parameter to post.
+// Add a excisting subcategory as parameter to send.
+it('Post a non existing subcategory without maincategory returns 400 Bad request', async done => {
+  const res = await request(app)
+  .post('/api/v1/admin/addsubcategory')
+  .send(testdata.newincompletesub)
+  expect(res.statusCode).toEqual(400)
+  done()
+})
 
 
 // Add a 'admin/addproduct' as parameter to post.

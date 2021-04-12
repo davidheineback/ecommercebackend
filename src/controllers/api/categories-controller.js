@@ -59,7 +59,7 @@ export class CategoriesController {
       if (subArray) {
         await Category.findOneAndUpdate({ name: req.body.mainCategory }, { subs: subArray })
       } else {
-        return res.status(400)
+        return res.sendStatus(400)
       }
       return res.sendStatus(200)
     } catch (error) {
