@@ -28,7 +28,7 @@ export class CategoriesController {
           subs: []
         }
         await Category.insert(categorydata)
-        return res.sendStatus(200)
+        return res.status(200).send(categorydata)
       }
       return res.status(409).send('Category already exist')
     } catch (error) {
@@ -61,7 +61,7 @@ export class CategoriesController {
       } else {
         return res.sendStatus(400)
       }
-      return res.sendStatus(200)
+      return res.status(200).send(subcategorydata)
     } catch (error) {
       next(error)
     }

@@ -30,7 +30,7 @@ describe('POST testing for database routes', () => {
 
 // Add a 'admin/addcategory' as parameter to post.
 // Add a excisting category as parameter to send.
-it('Post a a excisting category returns 409 conflict', async done => {
+it('Post a excisting category returns 409 conflict', async done => {
   const res = await request(app)
   .post('/api/v1/admin/addcategory')
   .send(testdata.newdoublymain)
@@ -40,7 +40,7 @@ it('Post a a excisting category returns 409 conflict', async done => {
 
 // Add a 'admin/addsubcategory' as parameter to post.
 // Add a excisting subcategory as parameter to send.
-it('Post a a excisting subcategory returns 200 OK', async done => {
+it('Post a excisting subcategory returns 200 OK', async done => {
   const res = await request(app)
   .post('/api/v1/admin/addsubcategory')
   .send(testdata.newdoublysub)
@@ -72,7 +72,7 @@ it('Post a a excisting product returns 409 conflict', async done => {
 
 // Add a 'admin/addcategory' as parameter to post.
 // Add a non excisting category as parameter to send.
-it('Post a a excisting category returns 409 conflict', async done => {
+it('Post a non excisting category returns 200 OK', async done => {
   const res = await request(app)
   .post('/api/v1/admin/addcategory')
   .send(testdata.newmain)
@@ -98,6 +98,29 @@ it('Post a non excisting product returns 200 OK', async done => {
   .post('/api/v1/admin/addproduct')
   .send(testdata.newproduct)
   expect(res.statusCode).toEqual(200)
+  done()
+})
+
+
+// Add a 'admin/addproduct' as parameter to post.
+// Add a non excisting product as parameter to send.
+it('Post a non excisting product returns expected data', async done => {
+  const res = await request(app)
+  .post('/api/v1/admin/addproduct')
+  .send(testdata.newproduct)
+  expect(res.body.name).toEqual(testdata.newproduct.name)
+  expect(res.body.itemNr).toEqual(600001)
+  done()
+})
+
+// Add a 'admin/addsubcategory' as parameter to post.
+// Add a non excisting subcategory as parameter to send.
+it('Post a non excisting subcategory returns expected data', async done => {
+  const res = await request(app)
+  .post('/api/v1/admin/addsubcategory')
+  .send(testdata.newsub)
+  expect(res.body.searchurl).toEqual('subcategory-3')
+  expect(res.body.subid).toEqual()
   done()
 })
 
