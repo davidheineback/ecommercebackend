@@ -9,7 +9,6 @@ import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
 import helmet from 'helmet'
-import logger from 'morgan'
 import { router } from '../src/routes/router.js'
 
 dotenv.config()
@@ -24,9 +23,6 @@ export const app = express()
 app.use(helmet())
 
 app.use(cors())
-
-// Set up a morgan logger using the dev format for log entries.
-app.use(logger('dev'))
 
 // Parse requests of the content type application/json.
 app.use(express.json({ limit: '500kb' }))
