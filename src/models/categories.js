@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-// Create a schema.
+// Create a categories schema.
 const schema = new mongoose.Schema({
   name: {
     type: String,
