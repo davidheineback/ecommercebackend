@@ -50,6 +50,10 @@
   "nodemonConfig": {
     "ext": "js,json,hbs,html,css"
   },
+  "engines": {
+    "node": "11.10.0",
+    "npm": "6.7.0"
+  },
   "jest": {
     "testEnvironment": "node",
     "transform": {},
