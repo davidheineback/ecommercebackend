@@ -66,7 +66,7 @@ const schema = new mongoose.Schema({
     transform: function (doc, ret) {
       delete ret._id
     },
-    virtuals: true // ensure virtual fields are serialized
+    virtuals: true // ensure virtual fields are serialized.
   }
 })
 
