@@ -32,10 +32,9 @@ install:
 test:unit:
    stage: test
    script:
-      -  npm run test
+      -  npm run test:pipeline
    dependencies:
       - install
-   coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
 
 linting:
    stage: test
