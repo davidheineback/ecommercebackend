@@ -32,7 +32,7 @@ install:
 test:unit:
    stage: test
    script:
-      -  npm run test:coverage
+      -  npm run test
    dependencies:
       - install
    coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
