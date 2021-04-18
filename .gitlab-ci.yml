@@ -32,7 +32,7 @@ install:
 test:unit:
    stage: test
    script:
-      -  npm run test
+      -  npm run test:pipeline
    dependencies:
       - install
 
