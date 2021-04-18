@@ -35,7 +35,6 @@ test:unit:
       -  npm run test
    dependencies:
       - install
-   coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
 
 linting:
    stage: test
