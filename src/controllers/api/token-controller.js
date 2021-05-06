@@ -72,7 +72,6 @@ export class TokenController {
         }
         req.user = user.sub
       })
-
       // Next middleware.
       next()
     } catch (error) {
