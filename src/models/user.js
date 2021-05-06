@@ -14,6 +14,13 @@ const schema = new mongoose.Schema({
     type: String,
     minlength: [10, 'The password must be of minimum length 10 characters.'],
     required: [true, 'User password required.']
+  },
+  isAdmin: {
+    type: Boolean,
+    default: false
+  },
+  refreshToken: {
+    type: String
   }
 }, {
   timestamps: true,

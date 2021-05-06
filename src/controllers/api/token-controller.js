@@ -18,19 +18,28 @@ export class TokenController {
       const user = await User.authenticate(req.body.username, req.body.password)
 
       const payload = {
-        sub: user.username
+        sub: user.username,
+        isAdmin: user.isAdmin
       }
 
       // Create the access token with the shorter lifespan.
-      const accessToken = jwt.sign(payload, Buffer.from(process.env.SIGN_TOKEN_SECRET, 'base64'), {
-        algorithm: 'RS256',
+      const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+        algorithm: 'HS256',
         expiresIn: process.env.ACCESS_TOKEN_LIFE
+      })
+
+      // Create the access token with the shorter lifespan.
+      const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
+        algorithm: 'HS256',
+        expiresIn: process.env.REFRESH_TOKEN_LIFE
       })
 
       res
         .status(200)
         .json({
-          access_token: accessToken
+          user: payload,
+          access_token: accessToken,
+          refresh_token: refreshToken
         })
     } catch (error) {
       // Authentication failed.
