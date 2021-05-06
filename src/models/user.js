@@ -57,12 +57,10 @@ schema.pre('save', async function () {
  */
 schema.statics.authenticate = async function (username, password) {
   const user = await this.findOne({ username })
-
   // If no user found or password is wrong, throw an error.
   if (!user || !(await bcrypt.compare(password, user.password))) {
     throw new Error('Invalid username or password.')
   }
-
   // User found and password correct, return the user.
   return user
 }
