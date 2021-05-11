@@ -62,11 +62,9 @@ export class TokenController {
     try {
       const authBearerHeader = req.headers.authorization
       const authToken = authBearerHeader && authBearerHeader.split(' ')[1]
-      if (authToken == null) {
-        return res.sendStatus(401)
-      }
+      if (authToken == null) return res.sendStatus(401)
 
-      jwt.verify(authToken, Buffer.from(process.env.SIGN_TOKEN_SECRET, 'base64'), (error, user) => {
+      jwt.verify(authToken, Buffer.from(process.env.ACCESS_TOKEN_SECRET, 'base64'), (error, user) => {
         if (error) {
           return res.sendStatus(403)
         }
