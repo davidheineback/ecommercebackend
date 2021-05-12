@@ -66,6 +66,25 @@ schema.statics.authenticate = async function (username, password) {
 }
 
 /**
+ * Add refreshtoken to authicated user.
+ *
+ * @param {string} username - represent a username
+ * @param {string} token - represents a refreshtoken strik
+ */
+schema.statics.setToken = async function (username, token) {
+  await this.findOneAndUpdate({ username: username }, { refreshToken: token })
+}
+
+/**
+ * Add refreshtoken to authicated user.
+ *
+ * @param {string} username - represent a username
+ */
+schema.statics.logout = async function (username) {
+  await this.findOneAndUpdate({ username: username }, { refreshToken: '' })
+}
+
+/**
  * Inserts a new user.
  *
  * @param {object} userData - ...
