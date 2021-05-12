@@ -18,7 +18,6 @@ router.route('/products/').get(fetchController.getProducts)
 router.route('/category/:id').get(fetchController.getIdFromMainName, fetchController.getProductsByCategoryId)
 router.route('/subcategory/:id').get(fetchController.getIdFromSubName, fetchController.getProductsByCategoryId)
 router.route('/product/:id').get(fetchController.getProdctWithId)
-router.route('/admin/auth').get(tokenController.authenticateToken)
 
 // Post routes::
 router.route('/admin/login').post(tokenController.login)
@@ -26,3 +25,5 @@ router.route('/admin/login').post(tokenController.login)
 router.route('/admin/addcategory').post(tokenController.authenticateToken, categoriesController.addNewCategory)
 router.route('/admin/addsubcategory').post(tokenController.authenticateToken, categoriesController.addNewSubCategory)
 router.route('/admin/addproduct').post(tokenController.authenticateToken, productsController.addNewProduct)
+router.route('/admin/auth').post(tokenController.authenticateToken)
+router.route('/admin/logout').post(tokenController.logout)
