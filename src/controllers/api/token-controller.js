@@ -1,6 +1,6 @@
-import jwt from 'jsonwebtoken'
 import createError from 'http-errors'
 import { User } from '../../models/user.js'
+import * as methodHandler from './method-controller.js'
 
 /**
  * Encapsulates a controller.
@@ -23,17 +23,12 @@ export class TokenController {
       }
 
       // Create the access token with the shorter lifespan.
-      const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
-        algorithm: 'HS256',
-        expiresIn: process.env.ACCESS_TOKEN_LIFE
-      })
+      const accessToken = methodHandler.getAccessToken(payload)
 
       // Create the access token with the shorter lifespan.
-      const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
-        algorithm: 'HS256',
-        expiresIn: process.env.REFRESH_TOKEN_LIFE
-      })
+      const refreshToken = methodHandler.getRefreshToken(payload)
 
+      await User.setToken(user.username, refreshToken)
       res
         .status(200)
         .json({
@@ -51,6 +46,23 @@ export class TokenController {
   }
 
   /**
+   * Logout a user.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   * @returns {status} - Returns a status representing the logout proccess
+   */
+  async logout (req, res, next) {
+    try {
+      await User.logout(req.body.user)
+      res.sendStatus(204)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
    * Authorize the user by validating the token.
    *
    * @param {object} req - Express request object.
@@ -59,19 +71,25 @@ export class TokenController {
    * @returns {Error} - Returns a error if user validation is failed.
    */
   async authenticateToken (req, res, next) {
+    console.log(req.route.path)
     try {
-      const authBearerHeader = req.headers.authorization
-      const authToken = authBearerHeader && authBearerHeader.split(' ')[1]
-      if (authToken == null) return res.sendStatus(401)
+      let authToken
+      if (req.body.access_token) {
+        authToken = req.body.access_token
+      } else {
+        const authBearerHeader = req.headers.authorization
+        authToken = authBearerHeader && authBearerHeader.split(' ')[1]
+      }
 
-      jwt.verify(authToken, Buffer.from(process.env.ACCESS_TOKEN_SECRET, 'base64'), (error, user) => {
-        if (error) {
-          return res.sendStatus(403)
-        }
-        req.user = user.sub
-      })
-      // Next middleware.
-      next()
+      if (authToken == null) return res.sendStatus(401)
+      const authObject = { body: req.body, secret: process.env.ACCESS_TOKEN_SECRET }
+      const user = await User.findOne({ username: req.body.user.sub })
+      const token = methodHandler.accessCheckCall(authObject, user)
+      if (token) {
+        res.status(200).json(token)
+      } else {
+        next()
+      }
     } catch (error) {
       next(error)
     }
