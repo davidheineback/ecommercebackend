@@ -122,9 +122,9 @@ export async function findCategoryIdByName (type, mainCategoryname, subCategoryn
  */
 export function accessCheckCall (req, user) {
   jwt.verify(req.body.access_token, req.secret,
-    async (error) => {
+    (error) => {
       if (error) {
-        if (req.body.refresh_token) {
+        if (error.message.includes('expired')) {
           req.body.access_token = refreshCall(req.body, user)
         } else {
           return createError(403)

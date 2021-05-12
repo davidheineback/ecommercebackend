@@ -73,13 +73,8 @@ export class TokenController {
   async authenticateToken (req, res, next) {
     console.log(req.route.path)
     try {
-      let authToken
-      if (req.body.access_token) {
-        authToken = req.body.access_token
-      } else {
-        const authBearerHeader = req.headers.authorization
-        authToken = authBearerHeader && authBearerHeader.split(' ')[1]
-      }
+      const authBearerHeader = req.headers.authorization
+      const authToken = authBearerHeader && authBearerHeader.split(' ')[1]
 
       if (authToken == null) return res.sendStatus(401)
       const authObject = { body: req.body, secret: process.env.ACCESS_TOKEN_SECRET }
