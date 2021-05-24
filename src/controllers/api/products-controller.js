@@ -70,17 +70,6 @@ export class ProductsController {
   }
 
   /**
-   * Updates a product in the database.
-   *
-   * @param {object} req - Express request object.
-   * @param {object} res - Express response object.
-   * @param {Function} next - Express next middleware function.
-   * @returns {Error} - Returns a error if user validation is failed.
-   */
-  async updateProduct (req, res, next) {
-  }
-
-  /**
    * Delete a product specified by id.
    *
    * @param {object} req - Express request object.
