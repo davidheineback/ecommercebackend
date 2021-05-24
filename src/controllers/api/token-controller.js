@@ -1,6 +1,6 @@
 import createError from 'http-errors'
 import { User } from '../../models/user.js'
-import * as methodHandler from './method-controller.js'
+import * as globalMethod from './method-controller.js'
 
 /**
  * Encapsulates a controller.
@@ -23,10 +23,10 @@ export class TokenController {
       }
 
       // Create the access token with the shorter lifespan.
-      const accessToken = methodHandler.getAccessToken(payload)
+      const accessToken = globalMethod.getAccessToken(payload)
 
       // Create the access token with the shorter lifespan.
-      const refreshToken = methodHandler.getRefreshToken(payload)
+      const refreshToken = globalMethod.getRefreshToken(payload)
 
       await User.setToken(user.username, refreshToken)
       res
@@ -84,7 +84,7 @@ export class TokenController {
       if (authToken == null) return res.sendStatus(401)
       const authObject = { body: req.body, secret: process.env.ACCESS_TOKEN_SECRET }
       const user = await User.findOne({ username: req.body.user.sub })
-      const token = methodHandler.accessCheckCall(authObject, user)
+      const token = globalMethod.accessCheckCall(authObject, user)
       if (token) {
         res.status(200).json(token)
       } else {

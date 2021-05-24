@@ -1,5 +1,5 @@
 import { Product } from '../../models/products.js'
-import { setNewId, findCategoryIdByName } from './method-controller.js'
+import * as globalMethod from './method-controller.js'
 
 /**
  * Encapsulates a controller.
@@ -15,14 +15,14 @@ export class ProductsController {
    */
   async addNewProduct (req, res, next) {
     try {
-      const productCategory = await findCategoryIdByName('main', req.body.productCategory)
+      const productCategory = await globalMethod.findCategoryIdByName('main', req.body.productCategory)
       let productSubCategory = ''
       if (req.body.productSubCategory.length > 0) {
-        productSubCategory = await findCategoryIdByName('sub', req.body.productCategory, req.body.productSubCategory)
+        productSubCategory = await globalMethod.findCategoryIdByName('sub', req.body.productCategory, req.body.productSubCategory)
       }
 
       if (productCategory && (productSubCategory || productSubCategory === '')) {
-        const itemNr = await setNewId('product')
+        const itemNr = await globalMethod.setNewId('product')
         const exists = await Product.findOne({ name: req.body.name })
         const productdata = {
           name: req.body.name,
@@ -61,17 +61,12 @@ export class ProductsController {
    * @returns {Error} - Returns a error if user validation is failed.
    */
   async patchProduct (req, res, next) {
-  }
-
-  /**
-   * Updates a product in the database.
-   *
-   * @param {object} req - Express request object.
-   * @param {object} res - Express response object.
-   * @param {Function} next - Express next middleware function.
-   * @returns {Error} - Returns a error if user validation is failed.
-   */
-  async updateProduct (req, res, next) {
+    const item = req.body.product.itemNr
+    const attribute = req.body.changeAttribute
+    const newValue = req.body.newValue
+    const product = await Product.findOneAndUpdate({ itemNr: item }, { [attribute]: newValue })
+    const response = globalMethod.escapeOutput(product)
+    res.status(200).json(response)
   }
 
   /**

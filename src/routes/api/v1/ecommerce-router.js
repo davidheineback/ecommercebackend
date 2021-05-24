@@ -27,3 +27,6 @@ router.route('/admin/addsubcategory').post(categoriesController.addNewSubCategor
 router.route('/admin/addproduct').post(productsController.addNewProduct)
 router.route('/admin/auth').post(tokenController.authenticateToken)
 router.route('/admin/logout').post(tokenController.logout)
+
+// Patch routes::
+router.route('/admin/patch').patch(productsController.patchProduct)
