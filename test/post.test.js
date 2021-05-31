@@ -12,7 +12,6 @@ import { app } from './server.js'
 dotenv.config()
 let accessToken
 
-
 describe('POST testing for database routes', () => {
   beforeAll(async () => {
     await mongoose.connect(process.env.DB_CONNECTION_STRING_TEST, {
@@ -25,12 +24,11 @@ describe('POST testing for database routes', () => {
       username: process.env.TESTUSER,
       password: process.env.TESTPASS
     })
-    const response = await request(app)
-    .post('/api/v1/admin/login')
-    .send({username: process.env.TESTUSER, password: process.env.TESTPASS})
-    console.log(response.body)
-    const userString = JSON.stringify(response.body)
-    accessToken = Buffer.from(userString, 'utf-8')
+      const response = await request(app)
+      .post('/api/v1/admin/login')
+      .send({username: process.env.TESTUSER, password: process.env.TESTPASS})
+      const userString = JSON.stringify(response.body)
+      accessToken = Buffer.from(userString, 'utf-8')
   })
   
   
@@ -92,7 +90,6 @@ it('Post a a excisting product returns 409 conflict', async done => {
 // Add a 'admin/addcategory' as parameter to post.
 // Add a non excisting category as parameter to send.
 it('Post a non excisting category returns 200 OK', async done => {
-  console.log('test2')
   const res = await request(app)
   .post('/api/v1/admin/addcategory')
   .set('Authorization', `Bearer ${accessToken}`)
