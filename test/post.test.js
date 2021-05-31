@@ -12,7 +12,6 @@ import { app } from './server.js'
 dotenv.config()
 let accessToken
 
-
 describe('POST testing for database routes', () => {
   beforeAll(async () => {
     await mongoose.connect(process.env.DB_CONNECTION_STRING_TEST, {
@@ -22,11 +21,17 @@ describe('POST testing for database routes', () => {
     })
     console.log(process.env.TESTUSER)
     console.log(process.env.TESTPASS)
-    await User.deleteMany()
+    // await User.deleteMany()
     await User.insert({
       username: process.env.TESTUSER,
       password: process.env.TESTPASS
     })
+      const response = await request(app)
+      .post('/api/v1/admin/login')
+      .send({username: process.env.TESTUSER, password: process.env.TESTPASS})
+      console.log(response.body)
+      const userString = JSON.stringify(response.body)
+      accessToken = Buffer.from(userString, 'utf-8')
   })
   
   
@@ -39,12 +44,6 @@ describe('POST testing for database routes', () => {
     await SubCategory.insertMany(testdata.subcategorydata)
     await SubCategory.insertMany(testdata.subcategorydata2)
     await Product.insertMany(testdata.productdata)
-    const response = await request(app)
-    .post('/api/v1/admin/login')
-    .send({username: process.env.TESTUSER, password: process.env.TESTPASS})
-    console.log(response.body)
-    const userString = JSON.stringify(response.body)
-    accessToken = Buffer.from(userString, 'utf-8')
   })
 
 // Add a 'admin/addcategory' as parameter to post.
