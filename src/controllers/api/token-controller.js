@@ -72,26 +72,37 @@ export class TokenController {
    */
   async authenticateToken (req, res, next) {
     console.log(req.route.path)
-    try {
-      let authToken
-      if (req.body.access_token) {
-        authToken = req.body.access_token
-      } else {
-        const authBearerHeader = req.headers.authorization
-        authToken = authBearerHeader && authBearerHeader.split(' ')[1]
-      }
 
-      if (authToken == null) return res.sendStatus(401)
-      const authObject = { body: req.body, secret: process.env.ACCESS_TOKEN_SECRET }
-      const user = await User.findOne({ username: req.body.user.sub })
+    try {
+      const userobj = await JSON.parse(Buffer.from(req.headers.authorization.split(' ')[1]).toString('ascii'))
+      if (userobj.access_token === null) return res.sendStatus(401)
+      const authObject = { body: userobj, secret: process.env.ACCESS_TOKEN_SECRET }
+      const user = await User.findOne({ username: userobj?.user?.sub })
       const token = globalMethod.accessCheckCall(authObject, user)
       if (token) {
-        res.status(200).json(token)
-      } else {
+        res.token = token
         next()
+      } else {
+        res.sendStatus(401)
       }
     } catch (error) {
-      next(error)
+      res.status(403)
+    }
+  }
+
+  /**
+   * Sends the response.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @returns {Error} - Returns a error if user validation is failed.
+   */
+  async responseHandler (req, res) {
+    const token = res.token
+    if (token) {
+      res.status(200).json(token)
+    } else {
+      res.sendStatus(401)
     }
   }
 

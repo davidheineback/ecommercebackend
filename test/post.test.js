@@ -4,19 +4,37 @@ import request from 'supertest'
 import { Product } from '../src/models/products.js'
 import { SubCategory } from '../src/models/subcategories.js'
 import { Category } from '../src/models/categories.js'
+import { User } from '../src/models/user.js'
 import { testdata } from './mockdata.js'
 import dotenv from 'dotenv'
 import { app } from './server.js'
 
 dotenv.config()
+let accessToken
+
 
 describe('POST testing for database routes', () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     await mongoose.connect(process.env.DB_CONNECTION_STRING_TEST, {
       useCreateIndex: true,
       useNewUrlParser: true,
       useUnifiedTopology: true
     })
+    await User.deleteMany()
+    await User.insert({
+      username: process.env.TESTUSER,
+      password: process.env.TESTPASS
+    })
+    const response = await request(app)
+    .post('/api/v1/admin/login')
+    .send({username: process.env.TESTUSER, password: process.env.TESTPASS})
+    console.log(response.body)
+    const userString = JSON.stringify(response.body)
+    accessToken = Buffer.from(userString, 'utf-8')
+  })
+  
+  
+  beforeEach(async () => {
     await Category.deleteMany()
     await SubCategory.deleteMany()
     await Product.deleteMany()
@@ -32,6 +50,7 @@ describe('POST testing for database routes', () => {
 it('Post a excisting category returns 409 conflict', async done => {
   const res = await request(app)
   .post('/api/v1/admin/addcategory')
+  .set('Authorization', `Bearer ${accessToken}`)
   .send(testdata.newdoublymain)
   expect(res.statusCode).toEqual(409)
   done()
@@ -42,6 +61,7 @@ it('Post a excisting category returns 409 conflict', async done => {
 it('Post a excisting subcategory returns 200 OK', async done => {
   const res = await request(app)
   .post('/api/v1/admin/addsubcategory')
+  .set('Authorization', `Bearer ${accessToken}`)
   .send(testdata.newdoublysub)
   expect(res.statusCode).toEqual(200)
   done()
@@ -52,6 +72,7 @@ it('Post a excisting subcategory returns 200 OK', async done => {
 it('Post a non existing subcategory without maincategory returns 400 Bad request', async done => {
   const res = await request(app)
   .post('/api/v1/admin/addsubcategory')
+  .set('Authorization', `Bearer ${accessToken}`)
   .send(testdata.newincompletesub)
   expect(res.statusCode).toEqual(400)
   done()
@@ -62,6 +83,7 @@ it('Post a non existing subcategory without maincategory returns 400 Bad request
 it('Post a a excisting product returns 409 conflict', async done => {
   const res = await request(app)
   .post('/api/v1/admin/addproduct')
+  .set('Authorization', `Bearer ${accessToken}`)
   .send(testdata.newdoublyproduct)
   expect(res.statusCode).toEqual(409)
   done()
@@ -70,8 +92,10 @@ it('Post a a excisting product returns 409 conflict', async done => {
 // Add a 'admin/addcategory' as parameter to post.
 // Add a non excisting category as parameter to send.
 it('Post a non excisting category returns 200 OK', async done => {
+  console.log('test2')
   const res = await request(app)
   .post('/api/v1/admin/addcategory')
+  .set('Authorization', `Bearer ${accessToken}`)
   .send(testdata.newmain)
   expect(res.statusCode).toEqual(200)
   done()
@@ -82,6 +106,7 @@ it('Post a non excisting category returns 200 OK', async done => {
 it('Post a a excisting subcategory returns 200 OK', async done => {
   const res = await request(app)
   .post('/api/v1/admin/addsubcategory')
+  .set('Authorization', `Bearer ${accessToken}`)
   .send(testdata.newsub)
   expect(res.statusCode).toEqual(200)
   done()
@@ -93,6 +118,7 @@ it('Post a a excisting subcategory returns 200 OK', async done => {
 it('Post a non excisting product returns 200 OK', async done => {
   const res = await request(app)
   .post('/api/v1/admin/addproduct')
+  .set('Authorization', `Bearer ${accessToken}`)
   .send(testdata.newproduct)
   expect(res.statusCode).toEqual(200)
   done()
@@ -103,6 +129,7 @@ it('Post a non excisting product returns 200 OK', async done => {
 it('Post a non excisting category returns expected data', async done => {
   const res = await request(app)
   .post('/api/v1/admin/addcategory')
+  .set('Authorization', `Bearer ${accessToken}`)
   .send(testdata.newmain)
   expect(res.body.searchurl).toEqual('mockup-5')
   expect(res.body.id).toEqual(3)
@@ -114,6 +141,7 @@ it('Post a non excisting category returns expected data', async done => {
 it('Post a non excisting subcategory returns expected data', async done => {
   const res = await request(app)
   .post('/api/v1/admin/addsubcategory')
+  .set('Authorization', `Bearer ${accessToken}`)
   .send(testdata.newsub)
   expect(res.body.searchurl).toEqual('subcategory-3')
   expect(res.body.subid).toEqual(3)
@@ -125,6 +153,7 @@ it('Post a non excisting subcategory returns expected data', async done => {
 it('Post a non excisting product returns expected data', async done => {
   const res = await request(app)
   .post('/api/v1/admin/addproduct')
+  .set('Authorization', `Bearer ${accessToken}`)
   .send(testdata.newproduct)
   expect(res.body.name).toEqual(testdata.newproduct.name)
   expect(res.body.itemNr).toEqual(600001)
@@ -133,6 +162,7 @@ it('Post a non excisting product returns expected data', async done => {
 
 
 afterAll(async () => {
+    await User.deleteMany()
     await Category.deleteMany()
     await Product.deleteMany()
     await SubCategory.deleteMany()

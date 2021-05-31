@@ -22,11 +22,11 @@ router.route('/product/:id').get(fetchController.getProdctWithId)
 // Post routes::
 router.route('/admin/login').post(tokenController.login)
 // router.route('/admin/register').post(tokenController.register)
-router.route('/admin/addcategory').post(categoriesController.addNewCategory)
-router.route('/admin/addsubcategory').post(categoriesController.addNewSubCategory)
-router.route('/admin/addproduct').post(productsController.addNewProduct)
-router.route('/admin/auth').post(tokenController.authenticateToken)
+router.route('/admin/addcategory').post(tokenController.authenticateToken, categoriesController.addNewCategory)
+router.route('/admin/addsubcategory').post(tokenController.authenticateToken, categoriesController.addNewSubCategory)
+router.route('/admin/addproduct').post(tokenController.authenticateToken, productsController.addNewProduct)
+router.route('/admin/auth').post(tokenController.authenticateToken, tokenController.responseHandler)
 router.route('/admin/logout').post(tokenController.logout)
 
 // Patch routes::
-router.route('/admin/patch').patch(productsController.patchProduct)
+router.route('/admin/patch').patch(tokenController.authenticateToken, productsController.patchProduct)

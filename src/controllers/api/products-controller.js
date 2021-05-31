@@ -61,12 +61,16 @@ export class ProductsController {
    * @returns {Error} - Returns a error if user validation is failed.
    */
   async patchProduct (req, res, next) {
-    const item = req.body.product.itemNr
-    const attribute = req.body.changeAttribute
-    const newValue = req.body.newValue
-    const product = await Product.findOneAndUpdate({ itemNr: item }, { [attribute]: newValue })
-    const response = globalMethod.escapeOutput(product)
-    res.status(200).json(response)
+    try {
+      const item = req.body.product.itemNr
+      const attribute = req.body.changeAttribute
+      const newValue = req.body.newValue
+      const product = await Product.findOneAndUpdate({ itemNr: item }, { [attribute]: newValue })
+      const response = globalMethod.escapeOutput(product)
+      res.status(200).json({ response, access_token: res.token })
+    } catch (error) {
+      res.sendStatus(403)
+    }
   }
 
   /**
