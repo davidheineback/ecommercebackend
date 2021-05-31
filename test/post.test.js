@@ -20,6 +20,8 @@ describe('POST testing for database routes', () => {
       useNewUrlParser: true,
       useUnifiedTopology: true
     })
+    console.log(process.env.TESTUSER)
+    console.log(process.env.TESTPASS)
     await User.deleteMany()
     await User.insert({
       username: process.env.TESTUSER,
