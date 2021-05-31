@@ -16,7 +16,6 @@ export class TokenController {
   async login (req, res, next) {
     try {
       const user = await User.authenticate(req.body.username, req.body.password)
-      console.log(user)
       const payload = {
         sub: user.username,
         isAdmin: user.isAdmin
@@ -38,7 +37,6 @@ export class TokenController {
         })
     } catch (error) {
       // Authentication failed.
-      console.log(error)
       const err = createError(401)
       err.innerException = error
 

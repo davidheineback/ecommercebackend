@@ -19,9 +19,7 @@ describe('POST testing for database routes', () => {
       useNewUrlParser: true,
       useUnifiedTopology: true
     })
-    console.log(process.env.TESTUSER)
-    console.log(process.env.TESTPASS)
-    // await User.deleteMany()
+    await User.deleteMany()
     await User.insert({
       username: process.env.TESTUSER,
       password: process.env.TESTPASS
@@ -29,7 +27,6 @@ describe('POST testing for database routes', () => {
       const response = await request(app)
       .post('/api/v1/admin/login')
       .send({username: process.env.TESTUSER, password: process.env.TESTPASS})
-      console.log(response.body)
       const userString = JSON.stringify(response.body)
       accessToken = Buffer.from(userString, 'utf-8')
   })
@@ -93,7 +90,6 @@ it('Post a a excisting product returns 409 conflict', async done => {
 // Add a 'admin/addcategory' as parameter to post.
 // Add a non excisting category as parameter to send.
 it('Post a non excisting category returns 200 OK', async done => {
-  console.log('test2')
   const res = await request(app)
   .post('/api/v1/admin/addcategory')
   .set('Authorization', `Bearer ${accessToken}`)
