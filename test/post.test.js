@@ -27,12 +27,6 @@ describe('POST testing for database routes', () => {
       username: process.env.TESTUSER,
       password: process.env.TESTPASS
     })
-    const response = await request(app)
-    .post('/api/v1/admin/login')
-    .send({username: process.env.TESTUSER, password: process.env.TESTPASS})
-    console.log(response.body)
-    const userString = JSON.stringify(response.body)
-    accessToken = Buffer.from(userString, 'utf-8')
   })
   
   
@@ -45,6 +39,12 @@ describe('POST testing for database routes', () => {
     await SubCategory.insertMany(testdata.subcategorydata)
     await SubCategory.insertMany(testdata.subcategorydata2)
     await Product.insertMany(testdata.productdata)
+    const response = await request(app)
+    .post('/api/v1/admin/login')
+    .send({username: process.env.TESTUSER, password: process.env.TESTPASS})
+    console.log(response.body)
+    const userString = JSON.stringify(response.body)
+    accessToken = Buffer.from(userString, 'utf-8')
   })
 
 // Add a 'admin/addcategory' as parameter to post.
