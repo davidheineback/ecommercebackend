@@ -38,6 +38,7 @@ export class TokenController {
         })
     } catch (error) {
       // Authentication failed.
+      console.log(error)
       const err = createError(401)
       err.innerException = error
 
