@@ -70,8 +70,6 @@ export class TokenController {
    * @returns {Error} - Returns a error if user validation is failed.
    */
   async authenticateToken (req, res, next) {
-    console.log(req.route.path)
-
     try {
       const userobj = await JSON.parse(Buffer.from(req.headers.authorization.split(' ')[1]).toString('ascii'))
       if (userobj.access_token === null) return res.sendStatus(401)

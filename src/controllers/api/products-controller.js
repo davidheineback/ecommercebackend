@@ -65,7 +65,8 @@ export class ProductsController {
       const item = req.body.product.itemNr
       const attribute = req.body.changeAttribute
       const newValue = req.body.newValue
-      const product = await Product.findOneAndUpdate({ itemNr: item }, { [attribute]: newValue })
+      await Product.findOneAndUpdate({ itemNr: item }, { [attribute]: newValue })
+      const product = await Product.findOne({ itemNr: item })
       const response = globalMethod.escapeOutput(product)
       res.status(200).json({ response, access_token: res.token })
     } catch (error) {
@@ -78,9 +79,15 @@ export class ProductsController {
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
-   * @param {Function} next - Express next middleware function.
    * @returns {Error} - Returns a error if user validation is failed.
    */
-  async deleteProductFromDb (req, res, next) {
+  async deleteProductFromDb (req, res) {
+    try {
+      const item = req.body.product.itemNr
+      await Product.findOneAndDelete({ itemNr: item })
+      res.sendStatus(204)
+    } catch (error) {
+      res.sendStatus(400)
+    }
   }
 }

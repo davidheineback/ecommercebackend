@@ -30,3 +30,6 @@ router.route('/admin/logout').post(tokenController.logout)
 
 // Patch routes::
 router.route('/admin/patch').patch(tokenController.authenticateToken, productsController.patchProduct)
+
+// Delete routes::
+router.route('/admin/delete').delete(tokenController.authenticateToken, productsController.deleteProductFromDb)

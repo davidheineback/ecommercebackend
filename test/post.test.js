@@ -100,7 +100,7 @@ it('Post a non excisting category returns 200 OK', async done => {
 
 // Add a 'admin/addsubcategory' as parameter to post.
 // Add a non excisting subcategory as parameter to send.
-it('Post a a excisting subcategory returns 200 OK', async done => {
+it('Post a excisting subcategory returns 200 OK', async done => {
   const res = await request(app)
   .post('/api/v1/admin/addsubcategory')
   .set('Authorization', `Bearer ${accessToken}`)
@@ -154,6 +154,29 @@ it('Post a non excisting product returns expected data', async done => {
   .send(testdata.newproduct)
   expect(res.body.name).toEqual(testdata.newproduct.name)
   expect(res.body.itemNr).toEqual(600001)
+  done()
+})
+
+// Add a 'admin/delete' as parameter to post.
+// Add a excisting product as parameter to send.
+it('Delete a excisting product returns expected status 204 OK, no content', async done => {
+  const res = await request(app)
+  .delete('/api/v1/admin/delete')
+  .set('Authorization', `Bearer ${accessToken}`)
+  .send({product: testdata.productdata})
+  expect(res.statusCode).toEqual(204)
+  done()
+})
+
+// Add a 'admin/patch' as parameter to post.
+// Add a excisting product as parameter to send.
+it('Patch a excisting product returns expected status 200 OK', async done => {
+  const res = await request(app)
+  .patch('/api/v1/admin/patch')
+  .set('Authorization', `Bearer ${accessToken}`)
+  .send({product: testdata.productdata, changeAttribute: 'price', newValue: 2000})
+  expect(res.statusCode).toEqual(200)
+  expect(res.body.response.price).toEqual(2000)
   done()
 })
 
