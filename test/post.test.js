@@ -160,6 +160,7 @@ it('Post a non excisting product returns expected data', async done => {
 // Add a 'admin/delete' as parameter to post.
 // Add a excisting product as parameter to send.
 it('Delete a excisting product returns expected status 204 OK, no content', async done => {
+  const obj = {deleteObject: testdata.productdata.itemNr} 
   const res = await request(app)
   .delete('/api/v1/admin/delete')
   .set('Authorization', `Bearer ${accessToken}`)

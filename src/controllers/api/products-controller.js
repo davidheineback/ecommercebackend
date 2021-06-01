@@ -83,7 +83,7 @@ export class ProductsController {
    */
   async deleteProductFromDb (req, res) {
     try {
-      const item = req.body.product.itemNr
+      const item = req.body.deleteObject
       await Product.findOneAndDelete({ itemNr: item })
       res.sendStatus(204)
     } catch (error) {
